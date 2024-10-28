@@ -1,0 +1,8 @@
+papersplease/app/xrxiv_dumps
+papersplease/app/sync_config
+papersplease/app/__pycache__/*
+papersplease/__pycache__/*
+__pycache__/*
+.DS_Store
+
+.vscode

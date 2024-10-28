@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "papersplease"
+version = "0.1.0"
+description = ""
+authors = ["Lev Kuzan <levko.kuzan@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.0.3"
+paperscraper = "^0.2.13"
+apscheduler = "^3.10.4"
+setuptools = "^75.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
