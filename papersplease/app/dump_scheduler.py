@@ -12,11 +12,17 @@ dump_managers = {
     DataSourceEnum.CHEMRXIV: DumpManager(DataSourceEnum.CHEMRXIV),
     DataSourceEnum.MEDRXIV: DumpManager(DataSourceEnum.MEDRXIV),
 }
+
+_syncing_in_progress = False
+def is_syncing(): return _syncing_in_progress
+
 def sync_dumps():
+    global _syncing_in_progress
+    _syncing_in_progress = True
     for source in dump_managers:
         dump_manager = dump_managers[source]
         dump_manager.sync()
-        
+    _syncing_in_progress = False
 
 
 def init_scheduler(app: Flask):

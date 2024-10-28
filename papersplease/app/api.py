@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from papersplease.app.common import DataSourceEnum, possible_data_source_values
 from papersplease.app.fetch_data import XrxivDataSource
+from papersplease.app.dump_scheduler import is_syncing
 
 xrxiv_client_map = {
     DataSourceEnum.BIORXIV: XrxivDataSource(DataSourceEnum.BIORXIV),
@@ -13,6 +14,9 @@ paperscraper_bp = Blueprint('paperscraper', __name__)
 
 @paperscraper_bp.route('/xrxiv_meta/<source>', methods=["POST"])
 def get_scrapers(source: str):
+    if (is_syncing()):
+        jsonify({"error": "The sync job is currently running. Please try again later."}), 503
+        
     if not (source in possible_data_source_values):
         raise Exception("impossible source!")
     request_data = request.get_json()
