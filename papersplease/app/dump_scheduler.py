@@ -22,13 +22,12 @@ def sync_dumps():
 def init_scheduler(app: Flask):
     # Initialize and configure APScheduler
     scheduler = BackgroundScheduler()
-    # scheduler.add_job(func=sync_dumps, trigger=CronTrigger(hour=2, minute=0))  # Runs daily at midnight
-    # scheduler.start()
+    scheduler.add_job(func=sync_dumps, trigger=CronTrigger(hour=2, minute=0))  # Runs daily at midnight
+    scheduler.start()
 
-    # # Ensure that the scheduler shuts down when the app stops
-    # @app.before_first_request
-    # def start_scheduler():
-    #     if not scheduler.running:
-    #         scheduler.start()
-    
+    # Ensure that the scheduler shuts down when the app stops
+    with app.app_context():
+        if not scheduler.running:
+            scheduler.start()
+
     return scheduler
