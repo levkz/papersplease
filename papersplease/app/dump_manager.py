@@ -29,14 +29,14 @@ class DumpManager:
         last_synced = self.sync_config.last_synced
         new_sync = datetime.now()
 
-        if (new_sync.timestamp == last_synced.timestamp): return
+        if (new_sync.date() == last_synced.date()): return
 
         source_dump_path = get_xrxiv_dump_path(self.source)
         temp_dump_path = get_xrxiv_temp_dump_path(self.source)
 
         xrxiv_dump_mapping[self.source](
-            begin_date=last_synced,
-            end_date=new_sync,
+            begin_date=last_synced.isoformat(),
+            end_date=new_sync.isoformat(),
             save_path=temp_dump_path,
         )
 
@@ -50,7 +50,9 @@ class DumpManager:
                     to_file.write(line)
         
         dataframe = pd.read_json(source_dump_path, lines=True)
+
         removed = dataframe.drop_duplicates(subset='doi', keep='last')
-        removed.to_json(source_dump_path, orient='records', lines=True)
+        removed['date'] = pd.to_datetime(removed['date'], errors='coerce', unit='ms')
+        removed.to_json(source_dump_path, orient='records', lines=True, date_format='iso')
 
         self.sync_config.update_last_synced(new_date=new_sync)
