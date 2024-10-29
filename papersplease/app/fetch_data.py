@@ -10,7 +10,7 @@ class XrxivMeta:
   def to_dict(self):
     return {
       'title': self.title,
-      "retrieaval_url": self.retrieval_url,
+      "retrieval_url": self.retrieval_url,
     }
 
 class XrxivDataSource:
@@ -18,13 +18,13 @@ class XrxivDataSource:
     self.xrxiv_query_client = XRXivQuery(get_xrxiv_dump_path(source))
     self.source = source
 
-  def get_retrieaval_url(self, doi: str):
+  def get_retrieval_url(self, doi: str):
     return f"https://www.{self.source}.org/content/{doi}.full.pdf"
   
   def deserialize_meta(self, meta: dict):
     return XrxivMeta(
       title=meta['title'],
-      retrieval_url=self.get_retrieaval_url(doi=meta['doi'])
+      retrieval_url=self.get_retrieval_url(doi=meta['doi'])
     )
 
   def get_documents_metadata(self, keywords: list[str], fetch_amount: int):
